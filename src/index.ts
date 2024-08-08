@@ -19,6 +19,8 @@ app.use(
 app.use(
   session({
     secret: "123456",
+    saveUninitialized: false,
+    resave: false,
   })
 );
 app.use(passport.initialize());
@@ -34,8 +36,17 @@ passport.use(
     }
   )
 );
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  console.log({ user });
+  done(null, { name: "sdfd" });
+});
 
 app.get("/", async (req, res, next) => {
+  console.log({ req: req.user });
   res.send("Hello");
 });
 
