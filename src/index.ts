@@ -5,6 +5,10 @@ import helmet from "helmet";
 import passport from "passport";
 import session from "express-session";
 import { Strategy as LocalStrategy } from "passport-local";
+import connect from "connect-sqlite3";
+
+const SQLiteStore = connect(session);
+
 //Intializing the express app
 const app = express();
 
@@ -20,7 +24,8 @@ app.use(
   session({
     secret: "123456",
     saveUninitialized: false,
-    resave: false,
+    resave: true,
+    store: new SQLiteStore(),
   })
 );
 app.use(passport.initialize());
