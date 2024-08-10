@@ -25,7 +25,10 @@ app.use(
     secret: "123456",
     saveUninitialized: false,
     resave: true,
-    store: new SQLiteStore(),
+    store: new SQLiteStore({
+      db: "./db.sqlite",
+      table: "sessions",
+    }) as session.Store,
   })
 );
 app.use(passport.initialize());
