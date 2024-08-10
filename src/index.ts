@@ -7,6 +7,15 @@ import session from "express-session";
 import { Strategy as LocalStrategy } from "passport-local";
 import connect from "connect-sqlite3";
 
+declare global {
+  namespace Express {
+    interface User {
+      id: string;
+      name: string;
+    }
+  }
+}
+
 const SQLiteStore = connect(session);
 
 //Intializing the express app
@@ -24,7 +33,7 @@ app.use(
   session({
     secret: "123456",
     saveUninitialized: false,
-    resave: true,
+    resave: false,
     store: new SQLiteStore({
       db: "./db.sqlite",
       table: "sessions",
@@ -40,21 +49,24 @@ passport.use(
   new LocalStrategy(
     { usernameField: "username", passwordField: "password" },
     function (username, password, done) {
-      return done(null, true);
+      const user = { name: "nnnpooh", id: "12345" };
+      return done(null, user);
     }
   )
 );
 passport.serializeUser(function (user, done) {
-  done(null, user);
+  done(null, user.id);
 });
 
-passport.deserializeUser(function (user, done) {
-  console.log({ user });
-  done(null, { name: "sdfd" });
+passport.deserializeUser<string>(function (id, done) {
+  console.log({ id });
+  done(null, { id, name: "" });
 });
 
 app.get("/", async (req, res, next) => {
-  console.log({ req: req.user });
+  console.log({ session: req.session });
+  const count = req.session?.count ?? 0;
+  req.session.count = count + 1;
   res.send("Hello");
 });
 
