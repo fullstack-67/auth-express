@@ -9,8 +9,9 @@
     "start": "node ./dist/src/index.js",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
-    "db:reset": "rimraf ./db/migrate db.sqlite",
-    "db:sync": "drizzle-kit generate && drizzle-kit migrate"
+    "db:reset": "rimraf ./db/migration db.sqlite",
+    "db:sync": "drizzle-kit generate && drizzle-kit migrate",
+    "db:seed": "ts-node ./db/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
+    "nanoid": "3.X",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "sqlite3": "^5.1.7",
