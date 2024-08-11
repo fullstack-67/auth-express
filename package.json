@@ -29,6 +29,7 @@
     "nanoid": "3.X",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "pug": "^3.0.3",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",

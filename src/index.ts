@@ -6,7 +6,22 @@ import sessionIns from "./session";
 import passportIns from "./passport";
 
 const app = express(); //Intializing the express app
-app.use(helmet());
+const scriptSources = ["'self'", "'unsafe-inline'", "'unsafe-eval'"];
+const styleSources = ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"];
+const connectSources = ["'self'"];
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: scriptSources,
+        scriptSrcElem: scriptSources,
+        styleSrc: styleSources,
+        connectSrc: connectSources,
+      },
+      reportOnly: true,
+    },
+  })
+);
 app.use(
   cors({
     origin: false, // Disable CORS
