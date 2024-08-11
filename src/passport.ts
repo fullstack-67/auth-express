@@ -3,8 +3,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 
 passportIns.use(
   new LocalStrategy(
-    { usernameField: "username", passwordField: "password" },
-    function (username, password, done) {
+    { usernameField: "email", passwordField: "password" },
+    function (email, password, done) {
       const user = { name: "nnnpooh", id: "12345" };
       return done(null, user);
     }
