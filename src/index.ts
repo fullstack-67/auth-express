@@ -2,26 +2,10 @@ import "dotenv/config";
 import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
 import helmet from "helmet";
-import passport from "passport";
-import session from "express-session";
-import { Strategy as LocalStrategy } from "passport-local";
-import connect from "connect-sqlite3";
+import sessionIns from "./session";
+import passportIns from "./passport";
 
-declare global {
-  namespace Express {
-    interface User {
-      id: string;
-      name: string;
-    }
-  }
-}
-
-const SQLiteStore = connect(session);
-
-//Intializing the express app
-const app = express();
-
-//Middleware
+const app = express(); //Intializing the express app
 app.use(helmet());
 app.use(
   cors({
@@ -29,48 +13,20 @@ app.use(
     // origin: "*", // Allow all origins
   })
 );
-app.use(
-  session({
-    secret: "123456",
-    saveUninitialized: false,
-    resave: false,
-    store: new SQLiteStore({
-      db: "./db.sqlite",
-      table: "sessions",
-    }) as session.Store,
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-// Extracts the entire body portion of an incoming request stream and exposes it on req.body.
-app.use(express.json());
-
-passport.use(
-  new LocalStrategy(
-    { usernameField: "username", passwordField: "password" },
-    function (username, password, done) {
-      const user = { name: "nnnpooh", id: "12345" };
-      return done(null, user);
-    }
-  )
-);
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser<string>(function (id, done) {
-  console.log({ id });
-  done(null, { id, name: "" });
-});
+app.use(express.json()); // Extracts the entire body portion of an incoming request stream and exposes it on req.body.
+app.use(sessionIns); // Session
+app.use(passportIns.initialize());
+app.use(passportIns.session());
 
 app.get("/", async (req, res, next) => {
   console.log({ session: req.session });
+
   const count = req.session?.count ?? 0;
   req.session.count = count + 1;
   res.send("Hello");
 });
 
-app.post("/api/login", passport.authenticate("local"), function (req, res) {
+app.post("/api/login", passportIns.authenticate("local"), function (req, res) {
   res.json(req.user);
 });
 
