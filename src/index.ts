@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Extracts the entire body portion of an incoming request stream and exposes it on req.body.
 app.use(express.static("public"));
 app.use(morgan("dev"));
-const scriptSources = ["'self'", "'unsafe-inline'", "'unsafe-eval'"];
+const scriptSources = ["'self'", "https://unpkg.com"];
 const styleSources = ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"];
 const connectSources = ["'self'"];
 app.use(
