@@ -39,8 +39,11 @@ app.use(passportIns.initialize());
 app.use(passportIns.session());
 
 app.get("/", async (req, res, next) => {
+  // console.log("----------/--------------");
+  // console.dir(req.user);
   res.render("pages/index", {
     title: "Home",
+    user: req.user,
   });
 });
 
@@ -51,10 +54,12 @@ app.get("/login", function (req, res) {
 });
 
 app.post("/login", passportIns.authenticate("local"), function (req, res) {
-  console.log("here");
-  console.log(req.body);
+  // console.log("----------Login--------------");
+  // console.log(req.body);
+  // console.log(req.session);
+
   // res.setHeader("HX-Redirect", "/");
-  res.send(`<div>OK</div>`);
+  res.send(`<div>You are now logged in.</div>`);
 });
 
 // Running app
