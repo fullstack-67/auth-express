@@ -53,7 +53,7 @@ app.get("/login", function (req, res) {
 app.post("/login", passportIns.authenticate("local"), function (req, res) {
   console.log("here");
   console.log(req.body);
-  res.setHeader("HX-Redirect", "/");
+  // res.setHeader("HX-Redirect", "/");
   res.send(`<div>OK</div>`);
 });
 

@@ -12,8 +12,16 @@ passportIns.use(
       const query = await dbClient.query.usersTable.findFirst({
         where: eq(usersTable.email, email),
       });
-      console.log(query);
-      return done(null, query);
+      if (!query) done(new Error("No User"), false);
+      console.log({ password, p: query });
+      bcrypt.compare(password, query?.password ?? "", function (err, result) {
+        console.log({ result });
+        if (result) {
+          return done(null, query);
+        } else {
+          return done(new Error("Wrong password"), false);
+        }
+      });
     }
   )
 );
@@ -22,7 +30,6 @@ passportIns.serializeUser(function (user, done) {
 });
 
 passportIns.deserializeUser<string>(function (id, done) {
-  console.log({ id });
   done(null, { id, name: "" });
 });
 
