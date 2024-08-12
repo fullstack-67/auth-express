@@ -1,12 +1,19 @@
 import passportIns from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcrypt";
+import { dbClient } from "@db/client";
+import { eq } from "drizzle-orm";
+import { usersTable } from "@db/schema";
 
 passportIns.use(
   new LocalStrategy(
     { usernameField: "email", passwordField: "password" },
-    function (email, password, done) {
-      const user = { name: "nnnpooh", id: "12345" };
-      return done(null, user);
+    async function (email, password, done) {
+      const query = await dbClient.query.usersTable.findFirst({
+        where: eq(usersTable.email, email),
+      });
+      console.log(query);
+      return done(null, query);
     }
   )
 );
