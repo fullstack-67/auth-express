@@ -39,8 +39,12 @@ app.use(passportIns.initialize());
 app.use(passportIns.session());
 
 app.get("/", async (req, res, next) => {
-  // console.log("----------/--------------");
-  // console.dir(req.user);
+  console.log("----------/--------------");
+  console.dir({
+    session: req.session,
+    user: req.user,
+    sessionID: req.sessionID,
+  });
   res.render("pages/index", {
     title: "Home",
     user: req.user,
@@ -60,6 +64,24 @@ app.post("/login", passportIns.authenticate("local"), function (req, res) {
 
   // res.setHeader("HX-Redirect", "/");
   res.send(`<div>You are now logged in.</div>`);
+});
+
+app.post("/logout", function (req, res, next) {
+  // req.logout will not delete the session in db. It will generate new one for the already-logout user.
+  // When the user login again, it will generate new session with the user id.
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    // If you want to delete the session in DB, you can use this function.
+    req.session.destroy(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.setHeader("HX-Redirect", "/");
+      res.send("<div></div>");
+    });
+  });
 });
 
 // Running app
