@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { dbClient } from "@db/client";
 import { eq } from "drizzle-orm";
 import { usersTable } from "@db/schema";
-
+import { Strategy as OAuth2Strategy } from "passport-oauth2";
 passportIns.use(
   new LocalStrategy(
     {
@@ -27,6 +27,30 @@ passportIns.use(
     }
   )
 );
+
+passportIns.use(
+  new OAuth2Strategy(
+    {
+      authorizationURL: "https://www.example.com/oauth2/authorize",
+      tokenURL: "https://www.example.com/oauth2/token",
+      clientID: "EXAMPLE_CLIENT_ID",
+      clientSecret: "EXAMPLE_CLIENT_SECRET",
+      callbackURL: "http://localhost:3000/auth/example/callback",
+    },
+    function (
+      accessToken: string,
+      refreshToken: string,
+      profile: any,
+      cb: any
+    ) {
+      console.log({ accessToken, refreshToken, profile, cb });
+      // User.findOrCreate({ exampleId: profile.id }, function (err, user) {
+      //   return cb(err, user);
+      // });
+    }
+  )
+);
+
 passportIns.serializeUser(function (user, done) {
   done(null, user.id);
 });
