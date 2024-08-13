@@ -62,8 +62,8 @@ app.post("/login", passportIns.authenticate("local"), function (req, res) {
   // console.log(req.body);
   // console.log(req.session);
 
-  // res.setHeader("HX-Redirect", "/");
-  res.send(`<div>You are now logged in.</div>`);
+  res.setHeader("HX-Redirect", "/");
+  res.send(`<div></div>`);
 });
 
 app.post("/logout", function (req, res, next) {
