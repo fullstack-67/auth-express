@@ -5,6 +5,13 @@ import { dbClient } from "@db/client";
 import { eq } from "drizzle-orm";
 import { usersTable } from "@db/schema";
 import { Strategy as OAuth2Strategy } from "passport-oauth2";
+import {
+  clientID,
+  callbackURL,
+  clientSecret,
+  tokenURL,
+  authorizationURL,
+} from "./env";
 passportIns.use(
   new LocalStrategy(
     {
@@ -31,11 +38,11 @@ passportIns.use(
 passportIns.use(
   new OAuth2Strategy(
     {
-      authorizationURL: "https://www.example.com/oauth2/authorize",
-      tokenURL: "https://www.example.com/oauth2/token",
-      clientID: "EXAMPLE_CLIENT_ID",
-      clientSecret: "EXAMPLE_CLIENT_SECRET",
-      callbackURL: "http://localhost:3000/auth/example/callback",
+      authorizationURL: authorizationURL,
+      tokenURL: tokenURL,
+      clientID: clientID,
+      clientSecret: clientSecret,
+      callbackURL: callbackURL,
     },
     function (
       accessToken: string,

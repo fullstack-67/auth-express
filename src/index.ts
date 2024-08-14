@@ -66,6 +66,28 @@ app.post("/login", passportIns.authenticate("local"), function (req, res) {
   res.send(`<div></div>`);
 });
 
+app.get(
+  "/login/oauth",
+  passportIns.authenticate("oauth2"),
+  function (req, res) {
+    // console.log("----------Login--------------");
+    // console.log(req.body);
+    // console.log(req.session);
+
+    res.setHeader("HX-Redirect", "/");
+    res.send(`<div></div>`);
+  }
+);
+
+app.get(
+  "/callback/github",
+  passportIns.authenticate("oauth2", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
+
 app.post("/logout", function (req, res, next) {
   // req.logout will not delete the session in db. It will generate new one for the already-logout user.
   // When the user login again, it will generate new session with the user id.
