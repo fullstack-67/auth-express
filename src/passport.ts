@@ -43,6 +43,7 @@ passportIns.use(
       clientID: clientID,
       clientSecret: clientSecret,
       callbackURL: callbackURL,
+      scope: "user,user:email",
     },
     function (
       accessToken: string,
