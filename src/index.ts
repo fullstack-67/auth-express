@@ -68,7 +68,7 @@ app.post("/login", passportIns.authenticate("local"), function (req, res) {
 
 app.get(
   "/login/oauth",
-  passportIns.authenticate("oauth2"),
+  passportIns.authenticate("github"),
   function (req, res) {
     // console.log("----------Login--------------");
     // console.log(req.body);
@@ -81,7 +81,7 @@ app.get(
 
 app.get(
   "/callback/github",
-  passportIns.authenticate("oauth2", { failureRedirect: "/login" }),
+  passportIns.authenticate("github", { failureRedirect: "/login" }),
   function (req, res) {
     // Successful authentication, redirect home.
     res.redirect("/");
