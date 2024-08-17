@@ -11,7 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:reset": "rimraf ./db/migration db.sqlite",
     "db:sync": "drizzle-kit generate && drizzle-kit migrate",
-    "db:seed": "ts-node ./db/seed.ts"
+    "db:seed": "ts-node ./db/seed.ts",
+    "db:prototype": "ts-node ./db/prototype.ts"
   },
   "keywords": [],
   "author": "",
