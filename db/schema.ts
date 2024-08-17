@@ -15,6 +15,7 @@ export const usersTable = sqliteTable("users", {
   email: text("email").unique().notNull(),
   password: text("password"), // I remove not null options.
   isAdmin: integer("is_admin", { mode: "boolean" }).notNull().default(false),
+  avatarURL: text("avatar_url"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).$default(
     () => new Date()
   ),

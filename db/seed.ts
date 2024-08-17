@@ -25,7 +25,7 @@ async function insertData() {
       ])
       .returning({ id: usersTable.id });
 
-    console.log(results);
+    // console.log(results);
 
     dbConn.close();
   });
