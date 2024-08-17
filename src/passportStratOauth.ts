@@ -53,8 +53,8 @@ export const github = new OAuthStrategy(
     if (!email) done("Cannot find email", false);
 
     const u = resUser.data;
-    const providerID = u.node_id;
-    const avatarURl = u.avatar_url;
+    const providerAccountId = u.node_id;
+    const avatarURL = u.avatar_url;
     const name = u.name;
 
     // User.findOrCreate({ exampleId: profile.id }, function (err, user) {
