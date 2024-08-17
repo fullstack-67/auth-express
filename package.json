@@ -9,10 +9,11 @@
     "start": "node ./dist/src/index.js",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
-    "db:reset": "rimraf ./db/migration db.sqlite",
+    "db:delete": "rimraf ./db/migration db.sqlite",
     "db:sync": "drizzle-kit generate && drizzle-kit migrate",
     "db:seed": "ts-node ./db/seed.ts",
-    "db:prototype": "ts-node ./db/prototype.ts"
+    "db:prototype": "ts-node ./db/prototype.ts",
+    "db:reset": "npm run db:delete && npm run db:sync && npm run db:seed"
   },
   "keywords": [],
   "author": "",

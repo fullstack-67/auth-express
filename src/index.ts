@@ -3,8 +3,8 @@ import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import sessionIns from "./session";
-import passportIns from "./passport";
+import sessionIns from "./auth/session";
+import passportIns from "./auth/passport";
 
 const app = express(); //Intializing the express app
 app.set("view engine", "pug");

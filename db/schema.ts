@@ -61,12 +61,6 @@ export const sessionsTable = sqliteTable("sessions", {
 });
 
 // For constructing user-data object to pass around
-type UsersTableInsert = typeof usersTable.$inferInsert;
-type AccountsTableInsert = typeof accountsTable.$inferInsert;
-export type UserData = Partial<
-  UsersTableInsert &
-    AccountsTableInsert & {
-      isUserExist: boolean;
-      isProviderAccountExist: boolean;
-    }
->;
+type UTI = typeof usersTable.$inferInsert;
+type ATI = typeof accountsTable.$inferInsert;
+export type UserData = UTI & ATI;
