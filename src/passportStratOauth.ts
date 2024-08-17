@@ -4,7 +4,7 @@ import {
 } from "passport-oauth2";
 import axios from "axios";
 import { GithubUser, GithubEmails } from "./types/github";
-
+import { eq } from "drizzle-orm";
 import {
   clientID,
   callbackURL,
@@ -12,6 +12,8 @@ import {
   tokenURL,
   authorizationURL,
 } from "./env";
+import { dbClient } from "@db/client";
+import { accountsTable, usersTable } from "@db/schema";
 
 export const github = new OAuthStrategy(
   {
@@ -49,13 +51,34 @@ export const github = new OAuthStrategy(
 
     console.log({ resUser: resUser.data, resEmails: resEmails.data });
 
-    const email = resEmails.data.find((em) => em.primary) ?? null;
-    if (!email) done("Cannot find email", false);
+    const emailQuery = resEmails.data.find((em) => em.primary) ?? null;
+    if (!emailQuery) done("Cannot find email", false);
+    const email = emailQuery?.email ?? "";
 
     const u = resUser.data;
     const providerAccountId = u.node_id;
     const avatarURL = u.avatar_url;
     const name = u.name;
+
+    // Check if user email exists
+    const userQuery = await dbClient.query.usersTable.findFirst({
+      where: eq(usersTable.email, email),
+      with: {
+        accounts: true,
+      },
+    });
+    if (userQuery) {
+      // Check if user already has Github account registered
+      const accountQuery = await dbClient.query.accountsTable.findFirst({
+        where: eq(accountsTable.provider, "GITHUB"),
+      });
+      if (accountQuery) {
+      } else {
+        // Add Github account
+      }
+    } else {
+      // Signup user and Github account
+    }
 
     // User.findOrCreate({ exampleId: profile.id }, function (err, user) {
     //   return cb(err, user);
