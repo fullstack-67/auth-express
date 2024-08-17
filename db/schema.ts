@@ -36,6 +36,8 @@ export const accountsTable = sqliteTable(
     provider: text("provider", { enum: ["GITHUB", "DISCORD"] }).notNull(),
     providerAccountId: text("provider_account").notNull(),
     profile: text("profile", { mode: "json" }),
+    accessToken: text("access_token"),
+    refreshToken: text("refresh_token"),
   },
   // I add composite key so that each user can have only one provider type.
   (table) => {
@@ -57,3 +59,14 @@ export const sessionsTable = sqliteTable("sessions", {
   expired: integer("expired"),
   sess: text("sess"),
 });
+
+// For constructing user-data object to pass around
+type UsersTableInsert = typeof usersTable.$inferInsert;
+type AccountsTableInsert = typeof accountsTable.$inferInsert;
+export type UserData = Partial<
+  UsersTableInsert &
+    AccountsTableInsert & {
+      isUserExist: boolean;
+      isProviderAccountExist: boolean;
+    }
+>;

@@ -13,7 +13,8 @@ import {
   authorizationURL,
 } from "./env";
 import { dbClient } from "@db/client";
-import { accountsTable, usersTable } from "@db/schema";
+import { accountsTable, usersTable, type UserData } from "@db/schema";
+import { findUserByEmail, findUserProviderAccount } from "@db/repositories";
 
 export const github = new OAuthStrategy(
   {
@@ -49,37 +50,36 @@ export const github = new OAuthStrategy(
       },
     });
 
-    console.log({ resUser: resUser.data, resEmails: resEmails.data });
-
+    const u = resUser.data;
     const emailQuery = resEmails.data.find((em) => em.primary) ?? null;
     if (!emailQuery) done("Cannot find email", false);
     const email = emailQuery?.email ?? "";
-
-    const u = resUser.data;
-    const providerAccountId = u.node_id;
-    const avatarURL = u.avatar_url;
-    const name = u.name;
+    //
+    const userData: UserData = {};
+    userData.email = email;
+    userData.provider = "GITHUB";
+    userData.providerAccountId = u.node_id ?? "";
+    userData.avatarURL = u.avatar_url;
+    userData.name = u.name;
+    userData.accessToken = accessToken ?? "";
+    userData.refreshToken = refreshToken ?? "";
 
     // Check if user email exists
-    const userQuery = await dbClient.query.usersTable.findFirst({
-      where: eq(usersTable.email, email),
-      with: {
-        accounts: true,
-      },
-    });
+    const userQuery = await findUserByEmail(email);
     if (userQuery) {
-      // Check if user already has Github account registered
-      const accountQuery = await dbClient.query.accountsTable.findFirst({
-        where: eq(accountsTable.provider, "GITHUB"),
-      });
-      if (accountQuery) {
+      userData.isUserExist = true;
+      const providerQuery = await findUserProviderAccount(email, "GITHUB");
+      if (providerQuery) {
+        userData.isProviderAccountExist = true;
       } else {
-        // Add Github account
+        userData.isProviderAccountExist = false;
       }
     } else {
-      // Signup user and Github account
+      userData.isUserExist = false;
+      userData.isProviderAccountExist = false;
     }
 
+    console.log(userData);
     // User.findOrCreate({ exampleId: profile.id }, function (err, user) {
     //   return cb(err, user);
     // });
