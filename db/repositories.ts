@@ -7,6 +7,7 @@ interface CheckUserOutput {
   isProviderAccountExist: boolean;
   isUserExist: boolean;
   accountId: string | null;
+  userId: string | null;
 }
 
 async function getUserFromId(id: string) {
@@ -23,6 +24,7 @@ async function checkUser(
     user: null,
     isProviderAccountExist: false,
     isUserExist: false,
+    userId: null,
     accountId: null,
   };
 
@@ -35,6 +37,7 @@ async function checkUser(
   });
   if (userQuery) {
     output.user = userQuery;
+    output.userId = userQuery.id;
     output.isUserExist = true;
     // Check if provider account exists
     const providerQuery = userQuery.accounts.find(
@@ -85,6 +88,7 @@ export async function handleUserData(uData: UserData) {
         accessToken: uData.accessToken,
         refreshToken: uData.refreshToken,
       });
+      // Update avatar
     } else {
       // If provider account exists, update information
       await dbClient
@@ -96,6 +100,14 @@ export async function handleUserData(uData: UserData) {
         })
         .where(eq(accountsTable.id, check.accountId ?? ""));
     }
+    // Update user avatar so that I know which provider I am using right now. In production, I should let user update own avatar.
+    if (uData?.avatarURL) {
+      await dbClient
+        .update(usersTable)
+        .set({ avatarURL: uData.avatarURL })
+        .where(eq(usersTable.id, check.userId ?? ""));
+    }
+    // Returning user
     return getUserFromId(check.user?.id ?? "");
   }
 }
