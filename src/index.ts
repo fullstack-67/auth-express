@@ -97,6 +97,15 @@ app.get(
   }
 );
 
+app.get(
+  "/callback/google",
+  passportIns.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
+
 app.post("/logout", function (req, res, next) {
   // req.logout will not delete the session in db. It will generate new one for the already-logout user.
   // When the user login again, it will generate new session with the user id.

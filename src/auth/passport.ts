@@ -2,10 +2,11 @@ import passportIns from "passport";
 import { dbClient } from "@db/client";
 import { eq } from "drizzle-orm";
 import { usersTable } from "@db/schema";
-import localStrategy from "./passportStratLocal";
-import { github, google } from "./passportStratOauth";
+import { local } from "./passportLocal";
+import { github } from "./passportOauthGithub";
+import { google } from "./passportOauthGoogle";
 
-passportIns.use(localStrategy);
+passportIns.use(local);
 passportIns.use("github", github);
 passportIns.use("google", google);
 

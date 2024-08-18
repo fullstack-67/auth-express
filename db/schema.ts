@@ -33,7 +33,9 @@ export const accountsTable = sqliteTable(
       .notNull()
       .unique(),
     userId: text("user_id").notNull(),
-    provider: text("provider", { enum: ["GITHUB", "DISCORD"] }).notNull(),
+    provider: text("provider", {
+      enum: ["GITHUB", "DISCORD", "GOOGLE"],
+    }).notNull(),
     providerAccountId: text("provider_account").notNull(),
     profile: text("profile", { mode: "json" }),
     accessToken: text("access_token"),

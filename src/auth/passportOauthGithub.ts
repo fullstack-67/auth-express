@@ -4,7 +4,7 @@ import {
 } from "passport-oauth2";
 import axios from "axios";
 import { GithubUser, GithubEmails } from "../types/github";
-import { github as gh, google as gg } from "../utils/env";
+import { github as gh } from "../utils/env";
 import { type UserData } from "@db/schema";
 import { handleUserData } from "@db/repositories";
 
@@ -64,26 +64,5 @@ export const github = new OAuthStrategy(
     } catch (err) {
       done(err, false);
     }
-  }
-);
-
-export const google = new OAuthStrategy(
-  {
-    authorizationURL: gg.googleAuthorizationURL,
-    tokenURL: gg.googleTokenURL,
-    clientID: gg.googleClientID,
-    clientSecret: gg.googleClientSecret,
-    callbackURL: gg.googleCallbackURL,
-    scope:
-      "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
-    passReqToCallback: false,
-  },
-  async function (
-    accessToken: string,
-    refreshToken: string,
-    profile: any,
-    done: VerifyCallback
-  ) {
-    console.log({ accessToken, refreshToken, profile, done });
   }
 );

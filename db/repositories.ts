@@ -15,7 +15,10 @@ async function getUserFromId(id: string) {
   });
 }
 
-async function checkUser(email: string, provider: "GITHUB" | "DISCORD") {
+async function checkUser(
+  email: string,
+  provider: "GITHUB" | "DISCORD" | "GOOGLE"
+) {
   const output: CheckUserOutput = {
     user: null,
     isProviderAccountExist: false,

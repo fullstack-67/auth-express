@@ -4,7 +4,7 @@ import { dbClient } from "@db/client";
 import { eq } from "drizzle-orm";
 import { usersTable } from "@db/schema";
 
-const localStrategy = new LocalStrategy(
+export const local = new LocalStrategy(
   {
     usernameField: "email",
     passwordField: "password",
@@ -24,5 +24,3 @@ const localStrategy = new LocalStrategy(
     });
   }
 );
-
-export default localStrategy;
