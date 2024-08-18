@@ -3,10 +3,11 @@ import { dbClient } from "@db/client";
 import { eq } from "drizzle-orm";
 import { usersTable } from "@db/schema";
 import localStrategy from "./passportStratLocal";
-import { github } from "./passportStratOauth";
+import { github, google } from "./passportStratOauth";
 
 passportIns.use(localStrategy);
 passportIns.use("github", github);
+passportIns.use("google", google);
 
 passportIns.serializeUser(function (user, done) {
   done(null, user.id);

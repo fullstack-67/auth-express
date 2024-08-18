@@ -67,7 +67,7 @@ app.post("/login", passportIns.authenticate("local"), function (req, res) {
 });
 
 app.get(
-  "/login/oauth",
+  "/login/oauth/github",
   passportIns.authenticate("github"),
   function (req, res) {
     // console.log("----------Login--------------");
@@ -85,6 +85,15 @@ app.get(
   function (req, res) {
     // Successful authentication, redirect home.
     res.redirect("/");
+  }
+);
+
+app.get(
+  "/login/oauth/google",
+  passportIns.authenticate("google"),
+  function (req, res) {
+    res.setHeader("HX-Redirect", "/");
+    res.send(`<div></div>`);
   }
 );
 
