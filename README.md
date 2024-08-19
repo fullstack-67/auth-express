@@ -1,3 +1,9 @@
+# Auth-MPA - V1
+
+- Multi-page app (using HTMX) to demonstrate authentical/authorization.
+
+- Use `commonjs` module.
+
 # Note
 
 - I have to use `nanoid@3.X` because of the lack of commonjs support. I tried following this [post](https://stackoverflow.com/q/70800567), but it was not working.
